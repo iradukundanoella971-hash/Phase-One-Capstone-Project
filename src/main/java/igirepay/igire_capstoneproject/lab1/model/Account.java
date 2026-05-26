@@ -2,7 +2,6 @@
 package igirepay.igire_capstoneproject.lab1.model;
 
 import java.time.LocalDate;
-import igirepay.igire_capstoneproject.lab1.model.Transaction;
 
 public abstract class Account {
     private String accountNumber;
