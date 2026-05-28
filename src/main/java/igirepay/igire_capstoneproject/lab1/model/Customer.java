@@ -3,15 +3,16 @@ package igirepay.igire_capstoneproject.lab1.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Customer {
-    private String customerId;
+    private UUID customerId;
     private String fullName;
     private String email;
     private String phoneNumber;
     private List<Account> accounts;
 
-    public Customer(String customerId, String fullName, String email, String phoneNumber) {
+    public Customer(UUID customerId, String fullName, String email, String phoneNumber) {
         this.customerId = customerId;
         this.fullName = fullName;
         this.email = email;
@@ -24,8 +25,8 @@ public class Customer {
     }
 
     // Getters and Setters
-    public String getCustomerId() { return customerId; }
-    public void setCustomerId(String customerId) { this.customerId = customerId; }
+    public UUID getCustomerId() { return customerId; }
+    public void setCustomerId(UUID customerId) { this.customerId = customerId; }
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
     public String getEmail() { return email; }
@@ -37,6 +38,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{id='" + customerId + "', name='" + fullName + "', email='" + email + "'}";
+        return "Customer{id='" + customerId.toString() + "', name='" + fullName + "', email='" + email + "'}";
     }
 }

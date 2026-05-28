@@ -1,9 +1,10 @@
 package igirepay.igire_capstoneproject.lab1.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Transaction {
-    private String referenceId;
+    private UUID referenceId;
     private double amount;
     private double fee;
     private LocalDateTime timestamp;
@@ -13,7 +14,7 @@ public class Transaction {
     private String status;
     private String failureReason;
 
-    public Transaction(String referenceId, double amount, double fee, String type,
+    public Transaction(UUID referenceId, double amount, double fee, String type,
                        String sourceAccountNumber, String targetAccountNumber, String status) {
         this.referenceId = referenceId;
         this.amount = amount;
@@ -26,8 +27,8 @@ public class Transaction {
     }
 
     // ====== ALL GETTERS AND SETTERS ======
-    public String getReferenceId() { return referenceId; }
-    public void setReferenceId(String referenceId) { this.referenceId = referenceId; }
+    public UUID getReferenceId() { return referenceId; }
+    public void setReferenceId(UUID referenceId) { this.referenceId = referenceId; }
     public double getAmount() { return amount; }
     public void setAmount(double amount) { this.amount = amount; }
     public double getFee() { return fee; }
@@ -48,6 +49,6 @@ public class Transaction {
     @Override
     public String toString() {
         return String.format("Txn[%s] %s: %.2f RWF (fee: %.2f) from %s to %s [%s]",
-                referenceId, type, amount, fee, sourceAccountNumber, targetAccountNumber, status);
+                referenceId.toString(), type, amount, fee, sourceAccountNumber, targetAccountNumber, status);
     }
 }

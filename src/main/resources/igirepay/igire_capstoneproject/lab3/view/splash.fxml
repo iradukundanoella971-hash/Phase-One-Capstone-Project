@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="igirepay.igire_capstoneproject.lab3.controller.SplashController"
+           styleClass="app-background"
+           prefWidth="440" prefHeight="720">
+
+    <VBox alignment="CENTER" spacing="24" styleClass="splash-card">
+        <HBox alignment="CENTER" spacing="10">
+            <Region styleClass="accent-dot"/>
+            <Label text="IgirePay" styleClass="splash-title"/>
+        </HBox>
+        <Label text="Smart banking for everyone" styleClass="splash-tagline"/>
+        <ProgressIndicator fx:id="loadingIndicator" styleClass="splash-spinner"/>
+        <Label text="Loading..." styleClass="splash-loading"/>
+    </VBox>
+</StackPane>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="igirepay.igire_capstoneproject.lab3.controller.TransactionController"
+            styleClass="dashboard-root"
+            prefWidth="440" prefHeight="720">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 20 24 12 24;">
+            <Button text="← Back" onAction="#handleBack" styleClass="btn-link"/>
+            <Label fx:id="pageTitleLabel" text="Transaction" styleClass="page-title"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll" hbarPolicy="NEVER">
+            <VBox spacing="16" style="-fx-padding: 0 24 24 24;">
+
+                <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" maxWidth="Infinity"/>
+
+                <VBox fx:id="depositPanel" spacing="14" styleClass="card" visible="false" managed="false">
+                    <Label text="Amount to deposit (RWF)" styleClass="form-label"/>
+                    <TextField fx:id="depositAmountField" promptText="e.g. 5000" styleClass="form-field"/>
+                    <Button text="Confirm Deposit" onAction="#handleDeposit" styleClass="btn-primary" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox fx:id="withdrawPanel" spacing="14" styleClass="card" visible="false" managed="false">
+                    <Label text="Amount to withdraw (RWF)" styleClass="form-label"/>
+                    <TextField fx:id="withdrawAmountField" promptText="e.g. 2000" styleClass="form-field"/>
+                    <Button text="Confirm Withdraw" onAction="#handleWithdraw" styleClass="btn-primary" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox fx:id="transferPanel" spacing="14" styleClass="card" visible="false" managed="false">
+                    <GridPane hgap="12" vgap="12">
+                        <columnConstraints>
+                            <ColumnConstraints minWidth="120"/>
+                            <ColumnConstraints hgrow="ALWAYS"/>
+                        </columnConstraints>
+                        <Label text="Receiver account" styleClass="form-label" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="transferReceiverField" promptText="Account number" styleClass="form-field"
+                                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label text="Amount (RWF)" styleClass="form-label" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="transferAmountField" promptText="e.g. 10000" styleClass="form-field"
+                                   GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                    </GridPane>
+                    <Label fx:id="transferFeeLabel" text="Transfer fee: —" styleClass="page-subtitle"/>
+                    <Button text="Confirm Transfer" onAction="#handleTransfer" styleClass="btn-primary" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox fx:id="historyPanel" spacing="12" styleClass="card" visible="false" managed="false">
+                    <Label text="Search / filter" styleClass="form-label"/>
+                    <TextField fx:id="searchField" promptText="Type, reference, amount..." styleClass="form-field"/>
+                    <Label fx:id="dailySummaryLabel" text="Today: 0 transaction(s) • 0 RWF" styleClass="page-subtitle"/>
+
+                    <TableView fx:id="historyTable" prefHeight="320" styleClass="history-table">
+                        <columns>
+                            <TableColumn fx:id="colTransactionId" text="Txn ID" prefWidth="70"/>
+                            <TableColumn fx:id="colReferenceId" text="Reference" prefWidth="100"/>
+                            <TableColumn fx:id="colType" text="Type" prefWidth="80"/>
+                            <TableColumn fx:id="colAmount" text="Amount" prefWidth="90"/>
+                            <TableColumn fx:id="colDate" text="Date" prefWidth="110"/>
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

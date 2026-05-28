@@ -1,12 +1,12 @@
 // ===== File: CustomerService.java =====
 package igirepay.igire_capstoneproject.lab1.service;
 
-import igirepay.igire_capstoneproject.lab1.model.Customer;
-import igirepay.igire_capstoneproject.lab1.model.Account;
-import igirepay.igire_capstoneproject.lab1.util.IdGenerator;
-import igirepay.igire_capstoneproject.lab1.util.ValidationUtils;
-
 import java.util.List;
+import java.util.UUID;
+
+import igirepay.igire_capstoneproject.lab1.model.Account;
+import igirepay.igire_capstoneproject.lab1.model.Customer;
+import igirepay.igire_capstoneproject.lab1.util.ValidationUtils;
 
 public class CustomerService {
     private List<Customer> customers;
@@ -22,15 +22,15 @@ public class CustomerService {
         if (!ValidationUtils.isValidPhone(phone)) {
             return "Invalid phone number (10-12 digits)";
         }
-        String customerId = IdGenerator.generateCustomerId();
+        UUID customerId = UUID.randomUUID();
         Customer newCustomer = new Customer(customerId, fullName, email, phone);
         customers.add(newCustomer);
-        return customerId;
+        return customerId.toString();
     }
 
     public Customer findCustomerById(String customerId) {
         for (Customer c : customers) {
-            if (c.getCustomerId().equals(customerId)) {
+            if (c.getCustomerId().toString().equals(customerId)) {
                 return c;
             }
         }

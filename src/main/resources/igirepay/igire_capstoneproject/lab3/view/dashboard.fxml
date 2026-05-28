@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="igirepay.igire_capstoneproject.lab3.controller.DashboardController"
+            styleClass="dashboard-root"
+            prefWidth="440" prefHeight="720">
+
+    <top>
+        <VBox spacing="4" style="-fx-padding: 20 24 8 24;">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="IgirePay" styleClass="title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="Logout" onAction="#handleLogout" styleClass="danger-button"/>
+            </HBox>
+            <Label fx:id="welcomeLabel" text="Welcome" styleClass="subtitle"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll" hbarPolicy="NEVER">
+            <VBox spacing="20">
+                <padding>
+                    <Insets top="8" right="24" bottom="24" left="24"/>
+                </padding>
+
+                <VBox spacing="10" styleClass="balance-card" alignment="CENTER_LEFT" maxWidth="Infinity">
+                    <HBox alignment="CENTER_LEFT" spacing="10">
+                        <Label text="Current balance" styleClass="balance-label"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <ComboBox fx:id="accountSelector" styleClass="account-combo"/>
+                    </HBox>
+                    <Label fx:id="balanceLabel" text="0 RWF" styleClass="balance-amount"/>
+                    <Label fx:id="accountTypeLabel" text="Wallet account" styleClass="balance-sub"/>
+                    <HBox alignment="CENTER_LEFT" spacing="8">
+                        <Label fx:id="accountNumberLabel" text="Account: ••••" styleClass="balance-sub"/>
+                        <Button text="Copy" onAction="#handleCopyAccount" styleClass="btn-copy"/>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="8" styleClass="card" maxWidth="Infinity">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Recent activity" styleClass="section-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="View all" onAction="#handleHistory" styleClass="btn-link"/>
+                    </HBox>
+                    <ListView fx:id="recentTransactionsList" prefHeight="120" styleClass="recent-list"/>
+                </VBox>
+
+                <Label text="Quick actions" styleClass="section-title"/>
+
+                <GridPane hgap="12" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                        <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <Button text="Deposit" onAction="#handleDeposit" styleClass="action-card"
+                            GridPane.rowIndex="0" GridPane.columnIndex="0" maxWidth="Infinity"/>
+                    <Button text="Withdraw" onAction="#handleWithdraw" styleClass="action-card"
+                            GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Button text="Transfer" onAction="#handleTransfer" styleClass="action-card"
+                            GridPane.rowIndex="1" GridPane.columnIndex="0" maxWidth="Infinity"/>
+                    <Button text="Open Savings" onAction="#handleOpenSavings" styleClass="action-card"
+                            GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Button text="History" onAction="#handleHistory" styleClass="action-card"
+                            GridPane.rowIndex="2" GridPane.columnIndex="0" maxWidth="Infinity"/>
+                    <Button text="Profile" onAction="#handleProfile" styleClass="action-card"
+                            GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                </GridPane>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

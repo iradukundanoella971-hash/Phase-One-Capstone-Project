@@ -1,24 +1,25 @@
-// ===== File: AccountService.java =====
-package igirepay.igire_capstoneproject.lab1.service;
 
-import igirepay.igire_capstoneproject.lab1.model.Account;
-import igirepay.igire_capstoneproject.lab1.model.Transaction;
-import igirepay.igire_capstoneproject.lab1.util.ValidationUtils;
+package igirepay.igire_capstoneproject.lab1.service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
+import igirepay.igire_capstoneproject.lab1.model.Account;
+import igirepay.igire_capstoneproject.lab1.model.Transaction;
+import igirepay.igire_capstoneproject.lab1.util.ValidationUtils;
 
 public class AccountService {
     private List<Account> accounts;
     private List<Transaction> transactionHistory;
-    private Set<String> processedRefIds;
-    private Map<String, String> failedTxLogs;
+    private Set<UUID> processedRefIds;
+    private Map<UUID, String> failedTxLogs;
     private TransactionService transactionService;
 
     public AccountService(List<Account> accounts, List<Transaction> transactionHistory,
-                          Set<String> processedRefIds, Map<String, String> failedTxLogs,
+                          Set<UUID> processedRefIds, Map<UUID, String> failedTxLogs,
                           TransactionService transactionService) {
         this.accounts = accounts;
         this.transactionHistory = transactionHistory;
@@ -68,11 +69,11 @@ public class AccountService {
         account.setDailyWithdrawnAmount(account.getDailyWithdrawnAmount() + amount);
     }
 
-    public String deposit(Account account, double amount, String referenceId) {
+    public String deposit(Account account, double amount, UUID referenceId) {
         if (!ValidationUtils.isValidAmount(amount)) {
             return "Invalid amount";
         }
-        if (transactionService.isDuplicateReference(referenceId)) {
+        if (transactionService.isDuplicateReference(referenceId, processedRefIds)) {
             return "Duplicate transaction reference";
         }
         account.deposit(amount);
@@ -83,11 +84,11 @@ public class AccountService {
         return "SUCCESS";
     }
 
-    public String withdraw(Account account, String pin, double amount, String referenceId) {
+    public String withdraw(Account account, String pin, double amount, UUID referenceId) {
         if (!ValidationUtils.isValidAmount(amount)) {
             return "Invalid amount";
         }
-        if (transactionService.isDuplicateReference(referenceId)) {
+        if (transactionService.isDuplicateReference(referenceId, processedRefIds)) {
             return "Duplicate transaction reference";
         }
         if (!validatePin(account, pin)) {
@@ -110,11 +111,11 @@ public class AccountService {
         return "SUCCESS";
     }
 
-    public String transfer(Account source, String pin, Account destination, double amount, String referenceId) {
+    public String transfer(Account source, String pin, Account destination, double amount, UUID referenceId) {
         if (!ValidationUtils.isValidAmount(amount)) {
             return "Invalid amount";
         }
-        if (transactionService.isDuplicateReference(referenceId)) {
+        if (transactionService.isDuplicateReference(referenceId, processedRefIds)) {
             return "Duplicate transaction reference";
         }
         if (!validatePin(source, pin)) {
