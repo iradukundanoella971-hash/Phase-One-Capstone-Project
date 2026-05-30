@@ -16,13 +16,11 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     @Override
     public void create(Transaction transaction) {
-        // Transaction model does not have account UUID; it only has account numbers.
-        // We use account_number fields to resolve account_id in SQL.
+
         final String sql = "INSERT INTO transactions (id, account_id, reference_id, transaction_type, amount, fee, source_account_number, target_account_number, status, failure_reason) " +
                 "SELECT ?, a.id, ?, ?, ?, ?, ?, ?, ?, ? " +
                 "FROM accounts a WHERE a.account_number = ?";
 
-        // Note: transaction_type -> transaction.getType()
         UUID id = UUID.randomUUID();
 
         try (Connection conn = DatabaseConnection.getConnection();

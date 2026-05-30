@@ -37,7 +37,7 @@
                     <Label fx:id="balanceLabel" text="0 RWF" styleClass="balance-amount"/>
                     <Label fx:id="accountTypeLabel" text="Wallet account" styleClass="balance-sub"/>
                     <HBox alignment="CENTER_LEFT" spacing="8">
-                        <Label fx:id="accountNumberLabel" text="Account: ••••" styleClass="balance-sub"/>
+                        <Label fx:id="accountNumberLabel" text="Account: ****" styleClass="balance-sub"/>
                         <Button text="Copy" onAction="#handleCopyAccount" styleClass="btn-copy"/>
                     </HBox>
                 </VBox>
@@ -67,10 +67,12 @@
                             GridPane.rowIndex="1" GridPane.columnIndex="0" maxWidth="Infinity"/>
                     <Button text="Open Savings" onAction="#handleOpenSavings" styleClass="action-card"
                             GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Button text="Request Loan" onAction="#handleLoan" styleClass="action-card"
+                            GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2" maxWidth="Infinity"/>
                     <Button text="History" onAction="#handleHistory" styleClass="action-card"
-                            GridPane.rowIndex="2" GridPane.columnIndex="0" maxWidth="Infinity"/>
+                            GridPane.rowIndex="3" GridPane.columnIndex="0" maxWidth="Infinity"/>
                     <Button text="Profile" onAction="#handleProfile" styleClass="action-card"
-                            GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                            GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
                 </GridPane>
             </VBox>
         </ScrollPane>

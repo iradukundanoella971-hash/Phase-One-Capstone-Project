@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="igirepay.igire_capstoneproject.lab3.controller.LoanController"
+            styleClass="dashboard-root"
+            prefWidth="440" prefHeight="720">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 20 24 12 24;">
+            <Button text="Back" onAction="#handleBack" styleClass="btn-link"/>
+            <Label text="Request Loan" styleClass="page-title"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="dashboard-scroll" hbarPolicy="NEVER">
+            <VBox spacing="16" style="-fx-padding: 0 24 24 24;">
+
+                <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" maxWidth="Infinity"/>
+
+                <VBox spacing="10" styleClass="card">
+                    <Label text="Active loan" styleClass="section-title"/>
+                    <Label fx:id="activeLoanStatusLabel" text="No active loan" styleClass="page-subtitle"/>
+                    <Label fx:id="activeLoanAmountLabel" text="Amount: --" styleClass="page-subtitle"/>
+                    <Label fx:id="activeLoanDueDateLabel" text="Due date: --" styleClass="page-subtitle"/>
+                    <Label fx:id="activeLoanRepaymentLabel" text="Repayment status: --" styleClass="page-subtitle"/>
+                    <Button fx:id="repayButton" text="Repay Current Loan" onAction="#handleRepayLoan"
+                            styleClass="btn-primary" maxWidth="Infinity"/>
+                </VBox>
+
+                <VBox spacing="14" styleClass="card">
+                    <Label text="Request a new loan" styleClass="section-title"/>
+                    <Label text="Loan repayment is due 30 days after approval." styleClass="page-subtitle" wrapText="true"/>
+
+                    <Label text="Loan amount (RWF)" styleClass="form-label"/>
+                    <TextField fx:id="loanAmountField" promptText="e.g. 100000" styleClass="form-field"/>
+
+                    <Label text="PIN" styleClass="form-label"/>
+                    <PasswordField fx:id="pinField" promptText="Enter your PIN" styleClass="form-field"/>
+
+                    <Button text="Request Loan" onAction="#handleRequestLoan" styleClass="btn-primary" maxWidth="Infinity"/>
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

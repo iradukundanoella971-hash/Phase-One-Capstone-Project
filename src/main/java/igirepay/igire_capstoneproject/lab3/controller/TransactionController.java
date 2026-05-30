@@ -1,5 +1,13 @@
 package igirepay.igire_capstoneproject.lab3.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import igirepay.igire_capstoneproject.lab1.exception.DuplicateTransactionException;
 import igirepay.igire_capstoneproject.lab1.model.Account;
 import igirepay.igire_capstoneproject.lab1.model.Transaction;
@@ -13,16 +21,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.stage.FileChooser;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.UUID;
 
 public class TransactionController {
 
@@ -230,21 +234,20 @@ public class TransactionController {
         String receiver = transferReceiverField.getText() == null ? "" : transferReceiverField.getText().trim();
         double amount = parseAmount(transferAmountField.getText());
         if (receiver.isBlank()) {
-            errorLabel.setText("Enter receiver account number");
+            errorLabel.setText("Enter receiver phone number");
+            return;
+        }
+        if (!ValidationUtils.isValidPhone(receiver)) {
+            errorLabel.setText("Enter a valid phone number");
             return;
         }
         if (!ValidationUtils.isValidAmount(amount)) {
             errorLabel.setText("Enter a valid amount greater than 0");
             return;
         }
-        Account destination = appController.findAccountByNumber(receiver);
-        if (destination == null) {
-            errorLabel.setText("Receiver account not found");
-            return;
-        }
         try {
             UUID ref = appController.generateReferenceId();
-            String result = appController.transfer(session.getActiveAccount(), session.getPin(), destination, amount, ref);
+            String result = appController.transferByPhone(session.getActiveAccount(), session.getPin(), receiver, amount, ref);
             if (!"SUCCESS".equals(result)) {
                 errorLabel.setText(result);
                 return;
@@ -256,6 +259,52 @@ public class TransactionController {
             errorLabel.setText(e.getMessage());
         } catch (Exception e) {
             AlertManager.showError("Transfer failed", e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleExportHistory() {
+        if (session.getActiveAccount() == null) {
+            AlertManager.showError("Export", "No active account found.");
+            return;
+        }
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Export Transaction History");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files", "*.csv"));
+        chooser.setInitialFileName("transaction-history-" + session.getActiveAccount().getAccountNumber() + ".csv");
+
+        File file = chooser.showSaveDialog(historyTable.getScene().getWindow());
+        if (file == null) {
+            return;
+        }
+
+        try (BufferedWriter writer = Files.newBufferedWriter(file.toPath())) {
+            writer.write("reference_id,timestamp,type,amount,fee,source_account,target_account,status,failure_reason");
+            writer.newLine();
+            for (Transaction tx : appController.getTransactionHistory(session.getActiveAccount())) {
+                writer.write(csv(tx.getReferenceId().toString()));
+                writer.write(',');
+                writer.write(csv(tx.getTimestamp() == null ? "" : tx.getTimestamp().format(DATE_FMT)));
+                writer.write(',');
+                writer.write(csv(tx.getType()));
+                writer.write(',');
+                writer.write(csv(String.valueOf(tx.getAmount())));
+                writer.write(',');
+                writer.write(csv(String.valueOf(tx.getFee())));
+                writer.write(',');
+                writer.write(csv(tx.getSourceAccountNumber()));
+                writer.write(',');
+                writer.write(csv(tx.getTargetAccountNumber()));
+                writer.write(',');
+                writer.write(csv(tx.getStatus()));
+                writer.write(',');
+                writer.write(csv(tx.getFailureReason()));
+                writer.newLine();
+            }
+            AlertManager.showInfo("Export", "Transaction history exported successfully.");
+        } catch (IOException e) {
+            AlertManager.showError("Export failed", e.getMessage());
         }
     }
 
@@ -277,5 +326,10 @@ public class TransactionController {
         } catch (Exception e) {
             return -1;
         }
+    }
+
+    private String csv(String value) {
+        String escaped = value == null ? "" : value.replace("\"", "\"\"");
+        return "\"" + escaped + "\"";
     }
 }

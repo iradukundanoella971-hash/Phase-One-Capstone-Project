@@ -25,8 +25,6 @@ public class Transaction {
         this.targetAccountNumber = targetAccountNumber;
         this.status = status;
     }
-
-    // ====== ALL GETTERS AND SETTERS ======
     public UUID getReferenceId() { return referenceId; }
     public void setReferenceId(UUID referenceId) { this.referenceId = referenceId; }
     public double getAmount() { return amount; }

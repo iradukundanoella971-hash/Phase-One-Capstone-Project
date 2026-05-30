@@ -14,7 +14,6 @@ public final class DatabaseConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-        // PreparedStatement-only rule is enforced in DAO layer; here we just provide connections.
         return DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
     }
 }

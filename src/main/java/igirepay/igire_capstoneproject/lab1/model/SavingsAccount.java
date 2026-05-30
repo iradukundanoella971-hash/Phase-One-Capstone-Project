@@ -1,4 +1,4 @@
-// ===== File: SavingsAccount.java =====
+
 package igirepay.igire_capstoneproject.lab1.model;
 
 public class SavingsAccount extends Account {

@@ -3,6 +3,7 @@ package igirepay.igire_capstoneproject.lab3.util;
 import igirepay.igire_capstoneproject.lab3.controller.AppController;
 import igirepay.igire_capstoneproject.lab3.controller.DashboardController;
 import igirepay.igire_capstoneproject.lab3.controller.LoginController;
+import igirepay.igire_capstoneproject.lab3.controller.LoanController;
 import igirepay.igire_capstoneproject.lab3.controller.ProfileController;
 import igirepay.igire_capstoneproject.lab3.controller.RegisterController;
 import igirepay.igire_capstoneproject.lab3.controller.SplashController;
@@ -26,6 +27,7 @@ public class NavigationManager {
     public static final String DASHBOARD_FXML = "/igirepay/igire_capstoneproject/lab3/view/dashboard.fxml";
     public static final String TRANSACTION_FXML = "/igirepay/igire_capstoneproject/lab3/view/transaction.fxml";
     public static final String PROFILE_FXML = "/igirepay/igire_capstoneproject/lab3/view/profile.fxml";
+    public static final String LOAN_FXML = "/igirepay/igire_capstoneproject/lab3/view/loan.fxml";
 
     public static final String MODE_DEPOSIT = "DEPOSIT";
     public static final String MODE_WITHDRAW = "WITHDRAW";
@@ -33,7 +35,7 @@ public class NavigationManager {
     public static final String MODE_HISTORY = "HISTORY";
 
     private static final String STYLESHEET = "/igirepay/igire_capstoneproject/lab3/css/style.css";
-    private static final Set<String> PROTECTED = Set.of(DASHBOARD_FXML, TRANSACTION_FXML, PROFILE_FXML);
+    private static final Set<String> PROTECTED = Set.of(DASHBOARD_FXML, TRANSACTION_FXML, PROFILE_FXML, LOAN_FXML);
 
     private final Stage stage;
     private final UserSession session;
@@ -64,20 +66,30 @@ public class NavigationManager {
     }
 
     private void wireController(Object controller) {
-        if (controller instanceof SplashController c) {
+        if (controller instanceof SplashController) {
+            SplashController c = (SplashController) controller;
             c.init(this);
-        } else if (controller instanceof LoginController c) {
+        } else if (controller instanceof LoginController) {
+            LoginController c = (LoginController) controller;
             c.init(this, session, appController);
-        } else if (controller instanceof RegisterController c) {
+        } else if (controller instanceof RegisterController) {
+            RegisterController c = (RegisterController) controller;
             c.init(this, session, appController);
-        } else if (controller instanceof DashboardController c) {
+        } else if (controller instanceof DashboardController) {
+            DashboardController c = (DashboardController) controller;
             c.init(this, session, appController);
-        } else if (controller instanceof TransactionController c) {
+        } else if (controller instanceof TransactionController) {
+            TransactionController c = (TransactionController) controller;
             c.init(this, session, appController, transactionMode);
-        } else if (controller instanceof ProfileController c) {
+        } else if (controller instanceof ProfileController) {
+            ProfileController c = (ProfileController) controller;
+            c.init(this, session, appController);
+        } else if (controller instanceof LoanController) {
+            LoanController c = (LoanController) controller;
             c.init(this, session, appController);
         }
     }
+
 
     public void goTo(String fxmlPath) {
         if (PROTECTED.contains(fxmlPath) && !session.isLoggedIn()) {
@@ -102,5 +114,9 @@ public class NavigationManager {
 
     public void goToProfile() {
         goTo(PROFILE_FXML);
+    }
+
+    public void goToLoan() {
+        goTo(LOAN_FXML);
     }
 }

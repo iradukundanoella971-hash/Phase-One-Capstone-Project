@@ -1,4 +1,4 @@
-// ===== File: ValidationUtils.java =====
+
 package igirepay.igire_capstoneproject.lab1.util;
 
 public class ValidationUtils {

@@ -20,7 +20,6 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public void create(Account account, UUID customerId, String accountType) {
-        // last_withdrawal_date should start as today.
         final String sql = "INSERT INTO accounts (id, customer_id, account_type, account_number, balance, pin, is_locked, pin_attempts, daily_withdrawn_amount, last_withdrawal_date) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -90,7 +89,6 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public void update(Account account) {
-        // NOTE: We update by account_number because Account model does not carry UUID id.
         final String sql = "UPDATE accounts SET balance = ?, pin = ?, is_locked = ?, pin_attempts = ?, daily_withdrawn_amount = ?, last_withdrawal_date = ? " +
                 "WHERE account_number = ?";
 
@@ -152,9 +150,6 @@ public class AccountDAOImpl implements AccountDAO {
         String accountNumber = rs.getString("account_number");
         String pin = rs.getString("pin");
 
-        // Account model constructor expects holder name; we don't have it in schema.
-        // We'll store customer_id as holder name placeholder.
-        // Services can still operate correctly because they rely on balance/pin/lock.
         String holderPlaceholder = String.valueOf(rs.getObject("customer_id", UUID.class));
 
         Account account;

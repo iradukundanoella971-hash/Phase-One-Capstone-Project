@@ -170,6 +170,11 @@ public class DashboardController {
     }
 
     @FXML
+    private void handleLoan() {
+        navigationManager.goToLoan();
+    }
+
+    @FXML
     private void handleProfile() {
         navigationManager.goToProfile();
     }

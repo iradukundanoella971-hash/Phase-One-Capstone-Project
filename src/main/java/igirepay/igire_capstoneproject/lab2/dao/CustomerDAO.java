@@ -8,6 +8,7 @@ import igirepay.igire_capstoneproject.lab1.model.Customer;
 public interface CustomerDAO {
     void create(Customer customer);
     Customer findById(UUID id);
+    Customer findByPhoneNumber(String phoneNumber);
     List<Customer> findAll();
     void update(Customer customer);
     void delete(UUID id);

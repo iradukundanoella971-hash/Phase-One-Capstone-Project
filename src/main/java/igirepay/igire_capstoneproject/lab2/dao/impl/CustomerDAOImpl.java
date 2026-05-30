@@ -60,6 +60,36 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
+    public Customer findByPhoneNumber(String phoneNumber) {
+        final String sql = "SELECT id, full_name, email, phone_number FROM customers WHERE phone_number = ?";
+
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            return null;
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, phoneNumber.trim());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return null;
+                }
+
+                return new Customer(
+                        rs.getObject("id", UUID.class),
+                        rs.getString("full_name"),
+                        rs.getString("email"),
+                        rs.getString("phone_number")
+                );
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to find customer by phone number", e);
+        }
+    }
+
+    @Override
     public List<Customer> findAll() {
         final String sql = "SELECT id, full_name, email, phone_number FROM customers";
 

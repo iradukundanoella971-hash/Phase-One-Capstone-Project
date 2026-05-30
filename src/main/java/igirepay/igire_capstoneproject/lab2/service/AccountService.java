@@ -73,7 +73,6 @@ public class AccountService {
         if (account.isLocked()) {
             return -2.0;
         }
-        // persist pinAttempts/lock if it changed during validatePin
         accountDAO.update(account);
         return account.getBalance();
     }
@@ -86,12 +85,65 @@ public class AccountService {
             return "Duplicate transaction reference";
         }
 
+        // Savings deposits must come directly from the user's wallet balance.
+        if (account instanceof SavingsAccount) {
+            Account wallet = findWalletForSavingsOwner(account);
+            if (wallet == null) {
+                return "No wallet account found";
+            }
+            if (wallet.getBalance() < amount) {
+                return "Insufficient funds";
+            }
+
+            // Deduct from wallet first, then add to savings.
+            wallet.setBalance(wallet.getBalance() - amount);
+            account.setBalance(account.getBalance() + amount);
+
+            Transaction tx = new Transaction(referenceId, amount, 0.0, "DEPOSIT",
+                    wallet.getAccountNumber(), account.getAccountNumber(), "SUCCESS");
+
+            accountDAO.update(wallet);
+            accountDAO.update(account);
+            txService.recordAndMarkProcessed(tx);
+            return "SUCCESS";
+        }
+
         account.deposit(amount);
         Transaction tx = new Transaction(referenceId, amount, 0.0, "DEPOSIT",
                 account.getAccountNumber(), null, "SUCCESS");
         accountDAO.update(account);
         txService.recordAndMarkProcessed(tx);
         return "SUCCESS";
+    }
+
+    private Account findWalletForSavingsOwner(Account savingsAccount) {
+        if (savingsAccount == null) {
+            return null;
+        }
+
+        UUID customerId = extractCustomerIdForAccount(savingsAccount);
+        if (customerId == null) {
+            return null;
+        }
+
+        for (Account a : accountDAO.findAll()) {
+            if (a instanceof WalletAccount && customerId.toString().equals(a.getAccountHolderName())) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    private UUID extractCustomerIdForAccount(Account account) {
+        if (account == null) {
+            return null;
+        }
+        // accountHolderName stores customer_id as a UUID string in AccountDAOImpl.mapAccount().
+        try {
+            return UUID.fromString(account.getAccountHolderName());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public String withdraw(Account account, String pin, double amount, UUID referenceId, TransactionService txService) {
@@ -158,8 +210,6 @@ public class AccountService {
             return "Insufficient funds for transfer + fee";
         }
 
-        // Withdrawal from source (wallet/savings models treat withdraw differently)
-        // For transfer we apply deduction directly to balance to match Lab1 behavior.
         source.setBalance(source.getBalance() - totalDeduction);
         destination.deposit(amount);
 
@@ -204,12 +254,8 @@ public class AccountService {
         return transactionDAO.findByAccountId(getAccountIdPlaceholder(account));
     }
 
-    // Account model doesn't store UUID id in Lab1.
-    // For now we interpret account.getAccountNumber() and let TransactionDAOImpl return transactions by account_id.
-    // This method is a placeholder and will be adjusted in TransactionService wiring.
     private UUID getAccountIdPlaceholder(Account account) {
-        // best-effort: look up by account number via DB and map not implemented here.
-        // For now return null; TransactionService/Main will use transactionDAO.findByAccountId through its own lookup.
+
         return null;
     }
 }

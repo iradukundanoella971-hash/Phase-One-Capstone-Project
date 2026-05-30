@@ -1,4 +1,4 @@
-// ===== File: Customer.java =====
+
 package igirepay.igire_capstoneproject.lab1.model;
 
 import java.util.ArrayList;
@@ -19,12 +19,10 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.accounts = new ArrayList<>();
     }
-
     public void addAccount(Account account) {
         accounts.add(account);
     }
 
-    // Getters and Setters
     public UUID getCustomerId() { return customerId; }
     public void setCustomerId(UUID customerId) { this.customerId = customerId; }
     public String getFullName() { return fullName; }

@@ -33,7 +33,6 @@ public class TransactionService {
     }
 
     public void recordAndMarkProcessed(Transaction tx) {
-        // TransactionDAO.create already inserts by resolving account_id from account_number.
         transactionDAO.create(tx);
         processedRequestDAO.create(tx.getReferenceId(), new Timestamp(System.currentTimeMillis()));
     }

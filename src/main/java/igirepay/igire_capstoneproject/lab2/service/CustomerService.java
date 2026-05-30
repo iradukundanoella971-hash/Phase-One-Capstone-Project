@@ -48,6 +48,13 @@ public class CustomerService {
         }
     }
 
+    public Customer findCustomerByPhone(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isBlank()) {
+            return null;
+        }
+        return customerDAO.findByPhoneNumber(phoneNumber.trim());
+    }
+
     public List<Customer> listCustomers() {
         return customerDAO.findAll();
     }
