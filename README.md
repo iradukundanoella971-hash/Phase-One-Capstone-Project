@@ -1,4 +1,6 @@
 #IGIREPAY PROJECT
+IgirePay Capstone Project 
+
 Project summary
 IgirePay is a JavaFX mobile banking application built with Maven and PostgreSQL. It supports user registration, login, wallet and savings accounts, deposits, withdrawals, transfers, loan requests, loan repayment, profile updates, notifications, and transaction history export.
 Architecture
